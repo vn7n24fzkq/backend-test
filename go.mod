@@ -25,6 +25,6 @@ require (
 	gopkg.in/jcmturner/gokrb5.v7 v7.5.0 // indirect
 	gopkg.in/jcmturner/rpc.v1 v1.1.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gorm.io/driver/postgres v1.1.0 // indirect
+	gorm.io/driver/mysql v1.1.1 // indirect
 	gorm.io/gorm v1.21.12 // indirect
 )
