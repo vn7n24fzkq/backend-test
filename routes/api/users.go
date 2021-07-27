@@ -1,8 +1,10 @@
 package api
 
 import (
-	"github.com/gin-gonic/gin"
 	"strconv"
+	"vn7n24fzkq/backend-test/service"
+
+	"github.com/gin-gonic/gin"
 )
 
 func GetUserById(c *gin.Context) {
@@ -11,5 +13,10 @@ func GetUserById(c *gin.Context) {
 		c.String(400, "something was wrong")
 		return
 	}
-	c.JSON(200, map[string]int{"id": id})
+	data, err := service.GetUserById(id)
+	if err != nil {
+		c.String(400, "something was wrong")
+		return
+	}
+	c.JSON(200, data)
 }
