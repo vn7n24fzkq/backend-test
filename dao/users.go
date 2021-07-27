@@ -7,7 +7,6 @@ type User struct {
 	Username       string     `json:"username"`
 	PasswordDigest string     `json:"-"`
 	Salt           string     `json:"-"`
-	ExpiredAt      time.Time  `json:"expiredAt"`
 	CreatedAt      time.Time  `json:"createdAt"`
 	UpdatedAt      time.Time  `json:"updatedAt"`
 	TodoLists      []TodoList `json:"-" gorm:"foreignKey:UserID"`
