@@ -19,6 +19,6 @@ func InitDatabase() (*gorm.DB, error) {
 	// NOTE: AutoMigrate will create tables, missing foreign keys, constraints, columns and indexes.
 	// It will change existing column’s type if its size, precision, nullable changed.
 	// It WON’T delete unused columns to protect your data.
-	db.AutoMigrate(&dao.User{}, &dao.TodoList{})
+	db.AutoMigrate(&dao.User{}, &dao.Task{})
 	return db, nil
 }

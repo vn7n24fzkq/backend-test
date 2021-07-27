@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-type TodoList struct {
+type Task struct {
 	ID        uint      `gorm:"primarykey"`
 	Title     string    `json:"title"`
 	Content   string    `json:"content"`
