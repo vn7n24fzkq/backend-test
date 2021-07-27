@@ -20,3 +20,7 @@ func GetUserById(c *gin.Context) {
 	}
 	c.JSON(200, data)
 }
+
+func CreateUser(c *gin.Context) {
+	//TODO
+}
