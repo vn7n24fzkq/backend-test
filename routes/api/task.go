@@ -3,21 +3,21 @@ package api
 import "github.com/gin-gonic/gin"
 
 func GetAllTasks(c *gin.Context) {
-    //TODO
+	//TODO
 }
 
 func GetTaskById(c *gin.Context) {
-    //TODO
+	//TODO
 }
 
 func CreateTask(c *gin.Context) {
-    //TODO
+	//TODO
 }
 
 func UpdateTask(c *gin.Context) {
-    //TODO
+	//TODO
 }
 
 func DeleteTask(c *gin.Context) {
-    //TODO
+	//TODO
 }
