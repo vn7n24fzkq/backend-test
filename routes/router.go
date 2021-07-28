@@ -1,28 +1,37 @@
 package routes
 
 import (
-	"github.com/gin-gonic/gin"
 	"vn7n24fzkq/backend-test/routes/api"
+	"vn7n24fzkq/backend-test/service"
+
+	"github.com/gin-gonic/gin"
 )
 
-func InitRouter() *gin.Engine {
-	gin := gin.Default()
-	// register route
-	registerRoutes(gin)
-	gin.Run(":8080")
-	return gin
+type Server struct {
+	gin *gin.Engine
 }
 
-func registerRoutes(server *gin.Engine) {
+func InstanceServer(engine *gin.Engine, userService *service.UserService, taskService *service.TaskService) *Server {
+	apiRoutes := &api.APIRoutes{UserService: userService, TaskService: taskService}
+	server := &Server{gin: engine}
+	// register route
+	server.registerRoutes(apiRoutes)
+	return server
+}
 
-	server.POST("/api/auth/registration", api.Registration)
-	server.POST("/api/auth", api.Auth)
+func (p *Server) Run(addr string) {
+	p.gin.Run(addr)
+}
 
-	server.GET("/api/users/:id", api.GetUserById)
+func (p *Server) registerRoutes(apiRouter *api.APIRoutes) {
+	p.gin.POST("/api/auth/registration", apiRouter.Registration)
+	p.gin.POST("/api/auth", apiRouter.Auth)
 
-	server.GET("/api/tasks", api.GetAllTasks)
-	server.GET("/api/tasks/:id", api.GetTaskById)
-	server.POST("/api/tasks", api.CreateTask)
-	server.PUT("/api/tasks/:id", api.UpdateTask)
-	server.DELETE("/api/tasks/:id", api.DeleteTask)
+	p.gin.GET("/api/users/:id", apiRouter.GetUserById)
+
+	p.gin.GET("/api/tasks", apiRouter.GetAllTasks)
+	p.gin.GET("/api/tasks/:id", apiRouter.GetTaskById)
+	p.gin.POST("/api/tasks", apiRouter.CreateTask)
+	p.gin.PUT("/api/tasks/:id", apiRouter.UpdateTask)
+	p.gin.DELETE("/api/tasks/:id", apiRouter.DeleteTask)
 }

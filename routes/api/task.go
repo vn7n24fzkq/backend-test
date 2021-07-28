@@ -2,22 +2,22 @@ package api
 
 import "github.com/gin-gonic/gin"
 
-func GetAllTasks(c *gin.Context) {
+func (p *APIRoutes) GetAllTasks(c *gin.Context) {
 	//TODO
 }
 
-func GetTaskById(c *gin.Context) {
+func (p *APIRoutes) GetTaskById(c *gin.Context) {
 	//TODO
 }
 
-func CreateTask(c *gin.Context) {
+func (p *APIRoutes) CreateTask(c *gin.Context) {
 	//TODO
 }
 
-func UpdateTask(c *gin.Context) {
+func (p *APIRoutes) UpdateTask(c *gin.Context) {
 	//TODO
 }
 
-func DeleteTask(c *gin.Context) {
+func (p *APIRoutes) DeleteTask(c *gin.Context) {
 	//TODO
 }
