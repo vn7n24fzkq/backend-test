@@ -11,10 +11,11 @@ import (
 )
 
 func BenchmarkAuthUser(b *testing.B) {
-
+	//TODO
 }
 
 func TestAuthUser(t *testing.T) {
+	//TODO
 }
 
 func TestCreateUser(t *testing.T) {
