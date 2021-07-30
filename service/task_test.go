@@ -92,6 +92,31 @@ func TestDeleteTaskByID(t *testing.T) {
 	}
 }
 
+func TestGetAllTaskByUserID(t *testing.T) {
+	taskService, userID := getTaskService(t)
+	var testTask = dao.Task{
+		Title:   "test",
+		Content: "content",
+		UserID:  userID,
+	}
+	var tasks, err = taskService.GetAllTaskByUserID(userID)
+	if len(tasks) != 0 {
+		t.Fatalf("Should get an empty task array. %s", err)
+	}
+	taskService.CreateTask(testTask)
+	taskService.CreateTask(testTask)
+	var task, _ = taskService.CreateTask(testTask)
+	tasks, err = taskService.GetAllTaskByUserID(userID)
+	if len(tasks) != 3 {
+		t.Fatalf("Should get an lenth 3 task array. %s", err)
+	}
+	taskService.DeleteTaskByID(task.ID)
+	tasks, err = taskService.GetAllTaskByUserID(userID)
+	if len(tasks) != 2 {
+		t.Fatalf("Should get an lenth 2 task array. %s", err)
+	}
+}
+
 // Return TaskService and pre-created user ID
 func getTaskService(t *testing.T) (*TaskService, int) {
 	db := GetTestDB(t)
@@ -109,5 +134,5 @@ func getTaskService(t *testing.T) (*TaskService, int) {
 		t.Fatalf("Get and error when pre-creating user")
 	}
 
-	return NewTaskService(taskDAO), user.ID
+	return NewTaskService(taskDAO, NewUserService(userDAO)), user.ID
 }

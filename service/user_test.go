@@ -31,8 +31,6 @@ func TestCreateUser(t *testing.T) {
 		t.Fatalf("Should not get any error when creating user. %s", err)
 	} else if user.Username != testUser.Username {
 		t.Fatalf("The username of created User is %s, but it should be %s", user.Username, testUser.Username)
-	} else if user.ID == 0 {
-		t.Fatalf("User ID should not be %d", user.ID)
 	}
 
 	user, err = userService.CreateUser(testUser)
@@ -76,7 +74,6 @@ func TestUpdateUserByID(t *testing.T) {
 	}
 
 	var user, _ = userService.CreateUser(testUser)
-	user, _ = userService.GetUserByID(user.ID)
 	var err = userService.UpdateUserByID(2, testUser)
 	if err == nil {
 		t.Fatalf("Should get an error when updating a not exists user")
