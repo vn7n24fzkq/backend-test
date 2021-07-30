@@ -13,17 +13,16 @@ func TestCreateTask(t *testing.T) {
 		Content: "content",
 		UserID:  userID,
 	}
-	_, err := taskService.TaskDAO.CreateTask(testTask)
+	_, err := taskService.CreateTask(testTask)
 	if err != nil {
 		t.Fatalf("Should not get any error when creating task. %s", err)
 	}
 
-	testTask.UserID = 0
-	_, err2 := taskService.TaskDAO.CreateTask(testTask)
+	testTask.UserID = userID + 1
+	_, err2 := taskService.CreateTask(testTask)
 	if err2 == nil {
-		t.Fatalf("Should get any error when creating task belong a not exists task. %s", err)
+		t.Fatalf("Should get an error when creating task belong a not exists user. %s", err)
 	}
-
 }
 
 func TestGetTaskByID(t *testing.T) {
@@ -63,8 +62,8 @@ func TestUpdateTaskByID(t *testing.T) {
 	var task, err = taskService.CreateTask(testTask)
 	testTask.Title = "updateTitle"
 	testTask.Content = "updatedContent"
-	testTask.ExpiredAt = time.Now()
-	err = taskService.UpdateTaskByID(testTask.ID, testTask)
+	testTask.ExpiredAt = time.Now().Unix()
+	err = taskService.UpdateTaskByID(task.ID, testTask)
 	if err != nil {
 		t.Fatalf("Should not get any error when updating task. %s", err)
 	}
