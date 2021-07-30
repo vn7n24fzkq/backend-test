@@ -25,12 +25,12 @@ func main() {
 	database.Migrate(db)
 
 	// Initialize DAO
-	taskDAO := dao.NewTaskDAO(db)
 	userDAO := dao.NewUserDAO(db)
+	taskDAO := dao.NewTaskDAO(db)
 
 	// Initialize Service
-	taskService := service.NewTaskService(taskDAO)
 	userService := service.NewUserService(userDAO)
+	taskService := service.NewTaskService(taskDAO, userService)
 
 	// Create http server
 	gin := gin.Default()
