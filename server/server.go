@@ -58,7 +58,6 @@ func (p *Server) registerRoutes(apiRouter *api.APIRouter) {
 			authAPI.GET("/users/:id", apiRouter.GetUserById)
 
 			authAPI.GET("/tasks", apiRouter.GetAllTasks)
-			authAPI.GET("/tasks/:id", apiRouter.GetTaskById)
 			authAPI.POST("/tasks", apiRouter.CreateTask)
 			authAPI.PUT("/tasks/:id", apiRouter.UpdateTask)
 			authAPI.DELETE("/tasks/:id", apiRouter.DeleteTask)
