@@ -4,40 +4,46 @@ import (
 	"testing"
 	"time"
 	"vn7n24fzkq/backend-test/dao"
+
+	"github.com/google/go-cmp/cmp"
 )
 
 func TestCreateTask(t *testing.T) {
-	taskService, userID := getTaskService(t)
+	taskService, preCreatedUserID := getTaskService(t)
 	var testTask = dao.Task{
 		Title:   "test",
 		Content: "content",
-		UserID:  userID,
+		UserID:  preCreatedUserID,
 	}
 	_, err := taskService.CreateTask(testTask)
 	if err != nil {
 		t.Fatalf("Should not get any error when creating task. %s", err)
 	}
+}
 
-	testTask.UserID = userID + 1
-	_, err2 := taskService.CreateTask(testTask)
-	if err2 == nil {
+func TestCreateTaskFail(t *testing.T) {
+	taskService, preCreatedUserID := getTaskService(t)
+	var testTask = dao.Task{
+		Title:   "test",
+		Content: "content",
+		UserID:  preCreatedUserID + 1,
+	}
+	taskService.CreateTask(testTask)
+	_, err := taskService.CreateTask(testTask)
+	if err == nil {
 		t.Fatalf("Should get an error when creating task belong a not exists user. %s", err)
 	}
 }
 
 func TestGetTaskByID(t *testing.T) {
-	taskService, userID := getTaskService(t)
+	taskService, preCreatedUserID := getTaskService(t)
 	var testTask = dao.Task{
 		Title:   "test",
 		Content: "content",
-		UserID:  userID,
-	}
-	var task, err = taskService.GetTaskByID(1)
-	if err == nil {
-		t.Fatal("Should get an error when try to get a task which is not exists.")
+		UserID:  preCreatedUserID,
 	}
 
-	task, err = taskService.CreateTask(testTask)
+	var task, err = taskService.CreateTask(testTask)
 	var createdTaskID = task.ID
 	task, err = taskService.GetTaskByID(createdTaskID)
 
@@ -48,16 +54,20 @@ func TestGetTaskByID(t *testing.T) {
 	}
 }
 
+func TestGetTaskByIDFail(t *testing.T) {
+	taskService, _ := getTaskService(t)
+	_, err := taskService.GetTaskByID(1)
+	if err == nil {
+		t.Fatal("Should get an error when try to get a task which is not exists.")
+	}
+}
+
 func TestUpdateTaskByID(t *testing.T) {
-	taskService, userID := getTaskService(t)
+	taskService, preCreatedUserID := getTaskService(t)
 	var testTask = dao.Task{
 		Title:   "test",
 		Content: "content",
-		UserID:  userID,
-	}
-	er := taskService.UpdateTaskByID(2, testTask)
-	if er == nil {
-		t.Fatalf("Should get an error when updating a not exists task")
+		UserID:  preCreatedUserID,
 	}
 	var task, err = taskService.CreateTask(testTask)
 	testTask.Title = "updateTitle"
@@ -74,46 +84,88 @@ func TestUpdateTaskByID(t *testing.T) {
 	}
 }
 
-func TestDeleteTaskByID(t *testing.T) {
-	taskService, userID := getTaskService(t)
+func TestUpdateTaskByIDFail(t *testing.T) {
+	taskService, preCreatedUserID := getTaskService(t)
 	var testTask = dao.Task{
 		Title:   "test",
 		Content: "content",
-		UserID:  userID,
+		UserID:  preCreatedUserID,
 	}
-	var task, _ = taskService.CreateTask(testTask)
-	var err = taskService.DeleteTaskByID(task.ID)
-	if err != nil {
-		t.Fatalf("Should not get any error when deleting a exists task. %s", err)
+	err := taskService.UpdateTaskByID(2, testTask)
+	if err == nil {
+		t.Fatalf("Should get an error when updating a not exists task")
 	}
+}
+
+func TestDeleteTaskByID(t *testing.T) {
+	taskService, preCreatedUserID := getTaskService(t)
+	var testTask = dao.Task{
+		Title:   "test",
+		Content: "content",
+		UserID:  preCreatedUserID,
+	}
+	var task, err = taskService.CreateTask(testTask)
+	err = taskService.DeleteTaskByID(task.ID)
+	if err == nil {
+		t.Fatalf("Should get an error when getting a deleted task. %s", err)
+	}
+}
+
+func TestDeleteTaskByIDFail(t *testing.T) {
+	taskService, preCreatedUserID := getTaskService(t)
+	var testTask = dao.Task{
+		Title:   "test",
+		Content: "content",
+		UserID:  preCreatedUserID,
+	}
+	var task, err = taskService.CreateTask(testTask)
 	task, err = taskService.GetTaskByID(task.ID)
 	if err == nil {
-		t.Fatalf("Should any error when getting a deleted task. %s", err)
+		t.Fatalf("Should get an error when getting a deleted task. %s", err)
 	}
 }
 
 func TestGetAllTaskByUserID(t *testing.T) {
-	taskService, userID := getTaskService(t)
+	taskService, preCreatedUserID := getTaskService(t)
+	var exceptTaskArray = []dao.Task{}
 	var testTask = dao.Task{
-		Title:   "test",
-		Content: "content",
-		UserID:  userID,
+		Title:     "test",
+		Content:   "content",
+		UserID:    preCreatedUserID,
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 	}
-	var tasks, err = taskService.GetAllTaskByUserID(userID)
-	if len(tasks) != 0 {
-		t.Fatalf("Should get an empty task array. %s", err)
+	var tasks, err = taskService.GetAllTaskByUserID(preCreatedUserID)
+	if !cmp.Equal(exceptTaskArray, tasks) {
+		t.Fatalf("Should equal with an empty task array. %s", err)
 	}
-	taskService.CreateTask(testTask)
-	taskService.CreateTask(testTask)
-	var task, _ = taskService.CreateTask(testTask)
-	tasks, err = taskService.GetAllTaskByUserID(userID)
-	if len(tasks) != 3 {
-		t.Fatalf("Should get an lenth 3 task array. %s", err)
+
+	var task1, _ = taskService.CreateTask(testTask)
+	exceptTaskArray = append(exceptTaskArray, task1)
+	var task2, _ = taskService.CreateTask(testTask)
+	exceptTaskArray = append(exceptTaskArray, task2)
+	var task3, _ = taskService.CreateTask(testTask)
+	exceptTaskArray = append(exceptTaskArray, task3)
+
+	tasks, err = taskService.GetAllTaskByUserID(preCreatedUserID)
+
+	for i := 0; i < 3; i++ {
+		if !cmp.Equal(exceptTaskArray[i], tasks[i]) {
+			t.Fatalf("Should equal with task array. %s", err)
+		}
 	}
-	taskService.DeleteTaskByID(task.ID)
-	tasks, err = taskService.GetAllTaskByUserID(userID)
-	if len(tasks) != 2 {
-		t.Fatalf("Should get an lenth 2 task array. %s", err)
+	taskService.DeleteTaskByID(task1.ID)
+	tasks, err = taskService.GetAllTaskByUserID(preCreatedUserID)
+	if len(tasks) == len(exceptTaskArray) {
+		t.Fatalf("Should not has same length. %s", err)
+	}
+}
+
+func TestGetAllTaskByUserIDFail(t *testing.T) {
+	taskService, preCreatedUserID := getTaskService(t)
+	var _, err = taskService.GetAllTaskByUserID(preCreatedUserID + 1)
+	if err == nil {
+		t.Fatalf("Should get an error when getting task belong a not exists user. %s", err)
 	}
 }
 
