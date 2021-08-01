@@ -4,17 +4,17 @@ import (
 	"errors"
 	"time"
 
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
 type User struct {
-	ID             int       `gorm:"primarykey"`
-	Username       string    `json:"username" binding:"required" gorm:"not null;size:128;uniqueIndex"`
-	PasswordDigest string    `json:"-" gorm:"not null;size:128"`
-	Salt           string    `json:"-" gorm:"not null;size:128"`
-	CreatedAt      time.Time `json:"createdAt"`
-	UpdatedAt      time.Time `json:"updatedAt"`
-	Tasks          []Task    `json:"-" gorm:"foreignKey:UserID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	ID             int    `gorm:"primarykey"`
+	Username       string `gorm:"not null;size:20;uniqueIndex"`
+	PasswordDigest string `gorm:"not null;size:60"`
+	CreatedAt      time.Time
+	UpdatedAt      time.Time
+	Tasks          []Task `gorm:"foreignKey:UserID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 func NewUserDAO(db *gorm.DB) *UserDAO {
@@ -50,4 +50,14 @@ func (p User) Update(dao *UserDAO, user User) error {
 
 func (p User) Delete(dao *UserDAO) error {
 	return dao.db.Delete(p).Error
+}
+
+func (p *User) CheckPassword(password string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(p.PasswordDigest), []byte(password))
+	return err == nil
+}
+
+func (p *User) HashPassword(pwd string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(pwd), bcrypt.DefaultCost)
+	return string(bytes), err
 }

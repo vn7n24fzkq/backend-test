@@ -7,8 +7,9 @@ func NewUserService(userDAO *dao.UserDAO) *UserService {
 }
 
 type UserService struct {
-	userDAO     *dao.UserDAO
+	userDAO *dao.UserDAO
 }
+
 
 // should return the created user with id
 func (p *UserService) CreateUser(user dao.User) (dao.User, error) {
@@ -17,6 +18,11 @@ func (p *UserService) CreateUser(user dao.User) (dao.User, error) {
 
 func (p *UserService) GetUserByID(id int) (dao.User, error) {
 	user, err := p.userDAO.FindOneUser(dao.User{ID: id})
+	return user, err
+}
+
+func (p *UserService) FindUserByUsername(username string) (dao.User, error) {
+	user, err := p.userDAO.FindOneUser(dao.User{Username: username})
 	return user, err
 }
 

@@ -2,10 +2,8 @@ package main
 
 import (
 	"vn7n24fzkq/backend-test/config"
-	"vn7n24fzkq/backend-test/dao"
 	"vn7n24fzkq/backend-test/database"
-	"vn7n24fzkq/backend-test/routes"
-	"vn7n24fzkq/backend-test/service"
+	"vn7n24fzkq/backend-test/server"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
@@ -24,17 +22,9 @@ func main() {
 	}
 	database.Migrate(db)
 
-	// Initialize DAO
-	userDAO := dao.NewUserDAO(db)
-	taskDAO := dao.NewTaskDAO(db)
-
-	// Initialize Service
-	userService := service.NewUserService(userDAO)
-	taskService := service.NewTaskService(taskDAO, userService)
-
 	// Create http server
 	gin := gin.Default()
 
-	server := routes.InstanceServer(gin, userService, taskService)
+	server := server.InstanceServer(gin, db)
 	server.Run(":8080")
 }

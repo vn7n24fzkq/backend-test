@@ -126,7 +126,6 @@ func getTaskService(t *testing.T) (*TaskService, int) {
 	user := dao.User{
 		Username:       "testUser",
 		PasswordDigest: "password",
-		Salt:           "salt",
 	}
 
 	user, err := userDAO.CreateUser(user)

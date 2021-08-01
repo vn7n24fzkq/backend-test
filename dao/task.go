@@ -8,14 +8,14 @@ import (
 )
 
 type Task struct {
-	ID        int       `gorm:"primarykey" json:"id"`
-	Title     string    `json:"title" binding:"required" gorm:"not null"`
-	Content   string    `json:"content" binding:"required" gorm:"not null"`
-	ExpiredAt int64     `json:"expiredAt" binding:"required" gorm:"index"`
-	Done      bool      `json:"done" binding:"required"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
-	UserID    int       `json:"UserID" gorm:"index;not null"`
+	ID        int    `gorm:"primarykey" json:"id"`
+	Title     string `gorm:"not null"`
+	Content   string `gorm:"not null"`
+	ExpiredAt int64  `gorm:"index"`
+	Done      bool
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	UserID    int `gorm:"index;not null"`
 }
 
 type TaskDAO struct {

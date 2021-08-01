@@ -19,12 +19,10 @@ func TestCreateUser(t *testing.T) {
 	var testUser = dao.User{
 		Username:       "testUser",
 		PasswordDigest: "password",
-		Salt:           "salt",
 	}
 	var anotherTestUser = dao.User{
 		Username:       "anothertestUser",
 		PasswordDigest: "password",
-		Salt:           "salt",
 	}
 	var user, err = userService.CreateUser(testUser)
 	if err != nil {
@@ -49,7 +47,6 @@ func TestGetUserByID(t *testing.T) {
 	var testUser = dao.User{
 		Username:       "testUser",
 		PasswordDigest: "password",
-		Salt:           "salt",
 	}
 	var user, err = userService.GetUserByID(1)
 	if err == nil {
@@ -70,7 +67,6 @@ func TestUpdateUserByID(t *testing.T) {
 	var testUser = dao.User{
 		Username:       "testUser",
 		PasswordDigest: "password",
-		Salt:           "salt",
 	}
 
 	var user, _ = userService.CreateUser(testUser)
@@ -80,14 +76,13 @@ func TestUpdateUserByID(t *testing.T) {
 	}
 	testUser.Username = "updatedName"
 	testUser.PasswordDigest = "updatedPassword"
-	testUser.Salt = "updatedSalt"
 	err = userService.UpdateUserByID(user.ID, testUser)
 	if err != nil {
 		t.Fatalf("Should not get any error when updating user. %s", err)
 	}
 
 	updatedUser, _ := userService.GetUserByID(user.ID)
-	if updatedUser.Username != testUser.Username || updatedUser.PasswordDigest != testUser.PasswordDigest || updatedUser.Salt != testUser.Salt {
+	if updatedUser.Username != testUser.Username || updatedUser.PasswordDigest != testUser.PasswordDigest {
 		t.Fatalf("Except the ID, user should be same with \n%+v\n,but it is \n%+v", testUser, updatedUser)
 	}
 }
@@ -97,7 +92,6 @@ func TestDeleteUserByID(t *testing.T) {
 	var testUser = dao.User{
 		Username:       "testUser",
 		PasswordDigest: "password",
-		Salt:           "salt",
 	}
 	var user, _ = userService.CreateUser(testUser)
 	var err = userService.DeleteUserByID(user.ID)

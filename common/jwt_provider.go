@@ -1,6 +1,7 @@
 package common
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
@@ -42,11 +43,15 @@ func DecodeJWT(tokenString string) (JWTUser, error) {
 
 		return []byte(hmacSecret), nil
 	})
+
+	if err != nil {
+		return JWTUser{}, err
+	}
+
 	claims, ok := token.Claims.(*jwtUserClaims)
 	if ok && token.Valid {
-		fmt.Printf("%+v", claims.User)
+		return claims.User, nil
 	} else {
-		fmt.Println(err)
+		return claims.User, errors.New("JWT is not valid")
 	}
-	return claims.User, err
 }
