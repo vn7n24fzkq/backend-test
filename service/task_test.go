@@ -106,22 +106,16 @@ func TestDeleteTaskByID(t *testing.T) {
 	}
 	var task, err = taskService.CreateTask(testTask)
 	err = taskService.DeleteTaskByID(task.ID)
-	if err == nil {
-		t.Fatalf("Should get an error when getting a deleted task. %s", err)
+	if err != nil {
+		t.Fatalf("Should not get any error when deleting task. %s", err)
 	}
 }
 
 func TestDeleteTaskByIDFail(t *testing.T) {
-	taskService, preCreatedUserID := getTaskService(t)
-	var testTask = dao.Task{
-		Title:   "test",
-		Content: "content",
-		UserID:  preCreatedUserID,
-	}
-	var task, err = taskService.CreateTask(testTask)
-	task, err = taskService.GetTaskByID(task.ID)
+	taskService, _ := getTaskService(t)
+	err := taskService.DeleteTaskByID(1)
 	if err == nil {
-		t.Fatalf("Should get an error when getting a deleted task. %s", err)
+		t.Fatalf("Should get an error when deleting a not exists task. %s", err)
 	}
 }
 
@@ -158,14 +152,6 @@ func TestGetAllTaskByUserID(t *testing.T) {
 	tasks, err = taskService.GetAllTaskByUserID(preCreatedUserID)
 	if len(tasks) == len(exceptTaskArray) {
 		t.Fatalf("Should not has same length. %s", err)
-	}
-}
-
-func TestGetAllTaskByUserIDFail(t *testing.T) {
-	taskService, preCreatedUserID := getTaskService(t)
-	var _, err = taskService.GetAllTaskByUserID(preCreatedUserID + 1)
-	if err == nil {
-		t.Fatalf("Should get an error when getting task belong a not exists user. %s", err)
 	}
 }
 
