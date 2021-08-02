@@ -18,7 +18,7 @@ type RegisterUser struct {
 func (p *RegisterUser) validate() *common.CommonError {
 	usernameMatchFailMsg := "The length of username should between 4 and 20, and only contains alphabet character and number"
 	passwordMatchFailMsg := "The length of password should between 8 and 20, and only contains alphabet character and number"
-	if match, err := regexp.MatchString("^[a-zA-Z0-9]{4,8}$", p.Username); !match {
+	if match, err := regexp.MatchString("^[a-zA-Z0-9]{4,20}$", p.Username); !match {
 		if err == nil {
 			err = errors.New(usernameMatchFailMsg)
 		}
