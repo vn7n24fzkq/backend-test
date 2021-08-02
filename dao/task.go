@@ -45,7 +45,7 @@ func (p *TaskDAO) FindOneTask(condition Task) (Task, error) {
 // FindTasks(Task{UserID:1})
 func (p *TaskDAO) FindTasks(condition Task) ([]Task, error) {
 	var tasks []Task
-	result := p.db.Where(condition).Find(&tasks)
+	result := p.db.Order("done").Order("expired_at").Where(condition).Find(&tasks)
 	if result.Error != nil {
 		return tasks, result.Error
 	}
