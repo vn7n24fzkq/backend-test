@@ -25,7 +25,7 @@ func InstanceServer(engine *gin.Engine, db *gorm.DB) *Server {
 	taskService := service.NewTaskService(taskDAO, userService)
 
 	// Initialize Cron jobs
-	taskCorn := cron.NewTaskCorn(userService,taskService)
+	taskCorn := cron.NewTaskCorn(userService, taskService)
 	taskCorn.InitTaskExpirationNotify()
 
 	// Initialize Middleware

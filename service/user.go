@@ -10,7 +10,6 @@ type UserService struct {
 	UserDAO *dao.UserDAO
 }
 
-
 // should return the created user with id
 func (p *UserService) CreateUser(user dao.User) (dao.User, error) {
 	return p.UserDAO.CreateUser(user)

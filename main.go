@@ -1,8 +1,8 @@
 package main
 
 import (
+	"fmt"
 	"os"
-    "fmt"
 	"vn7n24fzkq/backend-test/database"
 	"vn7n24fzkq/backend-test/server"
 
@@ -17,15 +17,15 @@ func main() {
 	var dbConn gorm.Dialector
 
 	if dsn == "" {
-        fmt.Println("-------------")
-        fmt.Println("We are using Sqlite as a database")
-        fmt.Println("-------------")
+		fmt.Println("-------------")
+		fmt.Println("We are using Sqlite as a database")
+		fmt.Println("-------------")
 
 		dbConn = sqlite.Open("./sqliteDB.db")
 	} else {
-        fmt.Println("-------------")
-        fmt.Println("We are using Mariadb as a database")
-        fmt.Println("-------------")
+		fmt.Println("-------------")
+		fmt.Println("We are using Mariadb as a database")
+		fmt.Println("-------------")
 
 		dbConn = mysql.Open(dsn)
 	}

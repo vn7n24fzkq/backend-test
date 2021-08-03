@@ -33,7 +33,7 @@ type DiscordNotificationField struct {
 
 func SendDiscordWebHookMsg(notify DiscordNotificationObject) error {
 
-    webhookURL := "https://discord.com/api/webhooks/872068219156975647/sg05ylkjRClL0SosmZo58H7VjPEcA0Eef_GQWGLW_MZPJLKTuxtmQKdp5e8aNT6UotRM"
+	webhookURL := "https://discord.com/api/webhooks/872068219156975647/sg05ylkjRClL0SosmZo58H7VjPEcA0Eef_GQWGLW_MZPJLKTuxtmQKdp5e8aNT6UotRM"
 
 	jsonStringByte, err := json.Marshal(notify)
 	if err != nil {
