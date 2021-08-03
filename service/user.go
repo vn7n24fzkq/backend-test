@@ -3,26 +3,26 @@ package service
 import "vn7n24fzkq/backend-test/dao"
 
 func NewUserService(userDAO *dao.UserDAO) *UserService {
-	return &UserService{userDAO: userDAO}
+	return &UserService{UserDAO: userDAO}
 }
 
 type UserService struct {
-	userDAO *dao.UserDAO
+	UserDAO *dao.UserDAO
 }
 
 
 // should return the created user with id
 func (p *UserService) CreateUser(user dao.User) (dao.User, error) {
-	return p.userDAO.CreateUser(user)
+	return p.UserDAO.CreateUser(user)
 }
 
 func (p *UserService) GetUserByID(id int) (dao.User, error) {
-	user, err := p.userDAO.FindOneUser(dao.User{ID: id})
+	user, err := p.UserDAO.FindOneUser(dao.User{ID: id})
 	return user, err
 }
 
 func (p *UserService) FindUserByUsername(username string) (dao.User, error) {
-	user, err := p.userDAO.FindOneUser(dao.User{Username: username})
+	user, err := p.UserDAO.FindOneUser(dao.User{Username: username})
 	return user, err
 }
 
@@ -32,7 +32,7 @@ func (p *UserService) UpdateUserByID(id int, user dao.User) error {
 	if err != nil {
 		return err
 	}
-	return targetUser.Update(p.userDAO, user)
+	return targetUser.Update(p.UserDAO, user)
 }
 
 func (p *UserService) DeleteUserByID(id int) error {
@@ -40,5 +40,5 @@ func (p *UserService) DeleteUserByID(id int) error {
 	if err != nil {
 		return err
 	}
-	return user.Delete(p.userDAO)
+	return user.Delete(p.UserDAO)
 }
