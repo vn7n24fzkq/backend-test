@@ -36,7 +36,7 @@ func (p *TaskCorn) InitTaskExpirationNotify() {
 				Embeds: []common.DiscordNotificationEmbed{
 					{
 						Title:       "Task expired!",
-						Description: "Expired at ",
+                        Description: "Expired at : " + time.Unix(task.ExpiredAt, 0).String(),
 						Color:       14177041,
 						Fields: []common.DiscordNotificationField{
 							{
