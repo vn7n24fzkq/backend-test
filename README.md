@@ -2,7 +2,7 @@
 
 - 網頁位址 : http://127.0.0.1:8080/static/
 
-## Requmient
+## Requirements
 
 - go 1.16
 
@@ -26,7 +26,7 @@ e.g. dsn={username}:{password}@tcp({host}:{port})/{database}?charset=utf8mb4&par
 dsn='admin:password@tcp(127.0.0.1:3306)/backend_test?charset=utf8mb4&parseTime=True&loc=Local' go run main.go
 ```
 
-## Test
+## How to test
 
 ```sh
 go test ./...
