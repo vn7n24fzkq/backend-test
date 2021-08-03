@@ -20,11 +20,13 @@ func main() {
         fmt.Println("-------------")
         fmt.Println("We are using Sqlite as a database")
         fmt.Println("-------------")
+
 		dbConn = sqlite.Open("./sqliteDB.db")
 	} else {
         fmt.Println("-------------")
         fmt.Println("We are using Mariadb as a database")
         fmt.Println("-------------")
+
 		dbConn = mysql.Open(dsn)
 	}
 	// Initialize database

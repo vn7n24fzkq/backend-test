@@ -1,6 +1,7 @@
 package server
 
 import (
+	"vn7n24fzkq/backend-test/cron"
 	"vn7n24fzkq/backend-test/dao"
 	"vn7n24fzkq/backend-test/middleware"
 	"vn7n24fzkq/backend-test/routes/api"
@@ -22,6 +23,10 @@ func InstanceServer(engine *gin.Engine, db *gorm.DB) *Server {
 	// Initialize Service
 	userService := service.NewUserService(userDAO)
 	taskService := service.NewTaskService(taskDAO, userService)
+
+	// Initialize Cron jobs
+	taskCorn := cron.NewTaskCorn(userService,taskService)
+	taskCorn.InitTaskExpirationNotify()
 
 	// Initialize Middleware
 	authMiddleware := &middleware.AuthMiddleware{}

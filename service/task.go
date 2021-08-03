@@ -28,6 +28,9 @@ func (p *TaskService) GetTaskByID(id int) (dao.Task, error) {
 func (p *TaskService) GetAllTaskByUserID(id int) ([]dao.Task, error) {
 	return p.TaskDAO.FindTasks(dao.Task{UserID: id})
 }
+
+func (p *TaskService) GetAllNeedNotifyTask(expiredUnixTimestamp int64) ([]dao.Task, error) {
+	return p.TaskDAO.FindNeedNotifyTasks(expiredUnixTimestamp)
 }
 
 func (p *TaskService) UpdateTaskByID(id int, task dao.Task) error {

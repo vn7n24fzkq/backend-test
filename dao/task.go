@@ -8,14 +8,15 @@ import (
 )
 
 type Task struct {
-	ID        int       `gorm:"primarykey"`
-	Title     string    `gorm:"not null" json:"title"`
-	Content   string    `gorm:"not null" json:"content"`
-	ExpiredAt int64     `gorm:"index" json:"expiredAt"`
-	Done      bool      `json:"done"`
-	CreatedAt time.Time `json:"createAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
-	UserID    int       `gorm:"index;not null" json:"userID"`
+	ID         int       `gorm:"primarykey"`
+	Title      string    `gorm:"not null" json:"title"`
+	Content    string    `gorm:"not null" json:"content"`
+	ExpiredAt  int64     `gorm:"index" json:"expiredAt"`
+	Done       bool      `json:"done"`
+	SendNotify bool      `gorm:"not null;default:false" json:"-"`
+	CreatedAt  time.Time `json:"createAt"`
+	UpdatedAt  time.Time `json:"updatedAt"`
+	UserID     int       `gorm:"index;not null" json:"userID"`
 }
 
 type TaskDAO struct {
@@ -46,6 +47,16 @@ func (p *TaskDAO) FindOneTask(condition Task) (Task, error) {
 func (p *TaskDAO) FindTasks(condition Task) ([]Task, error) {
 	var tasks []Task
 	result := p.db.Order("done").Order("expired_at").Where(condition).Find(&tasks)
+	if result.Error != nil {
+		return tasks, result.Error
+	}
+	return tasks, nil
+}
+
+func (p *TaskDAO) FindNeedNotifyTasks(expiredUnixTimestamp int64) ([]Task, error) {
+	var tasks []Task
+	result := p.db.Order("expired_at").Where("done = ? AND send_notify = ? AND expired_at < ? ",
+		false, false, expiredUnixTimestamp).Find(&tasks)
 	if result.Error != nil {
 		return tasks, result.Error
 	}
