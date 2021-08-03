@@ -1,21 +1,26 @@
 package main
 
 import (
-	"vn7n24fzkq/backend-test/config"
+	"os"
 	"vn7n24fzkq/backend-test/database"
 	"vn7n24fzkq/backend-test/server"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 func main() {
-	// Initialize config
-	config.InitConfig()
+	dsn := os.Getenv("dsn")
+	var dbConn gorm.Dialector
 
+	if dsn == "" {
+		dbConn = sqlite.Open("../sqlitdb.db")
+	} else {
+		dbConn = mysql.Open(dsn)
+	}
 	// Initialize database
-	dsn := config.DatabaseConfig.User + ":" + config.DatabaseConfig.Password + "@tcp(" + config.DatabaseConfig.Host + ":" + config.DatabaseConfig.Port + ")/" + config.DatabaseConfig.Database + "?charset=utf8mb4&parseTime=True&loc=Local"
-	dbConn := mysql.Open(dsn)
 	db, err := database.InitDatabase(dbConn)
 	if err != nil {
 		panic("failed to connect database")

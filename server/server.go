@@ -24,7 +24,6 @@ func InstanceServer(engine *gin.Engine, db *gorm.DB) *Server {
 	taskService := service.NewTaskService(taskDAO, userService)
 
 	// Initialize Middleware
-
 	authMiddleware := &middleware.AuthMiddleware{}
 	errorHandlerMiddleware := &middleware.ErrorHandlerMiddleware{}
 	apiRoutes := api.NewAPIRouter(
@@ -48,6 +47,7 @@ func (p *Server) Run(addr string) {
 }
 
 func (p *Server) registerRoutes(apiRouter *api.APIRouter) {
+	p.gin.Static("/static", "./static")
 	api := p.gin.Group("/api", apiRouter.ErrorHandler.HandleError())
 	{
 		api.POST("/registration", apiRouter.Registration)
