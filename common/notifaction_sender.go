@@ -33,7 +33,9 @@ type DiscordNotificationField struct {
 
 func SendDiscordWebHookMsg(notify DiscordNotificationObject) error {
 
-	webhookURL := "https://discord.com/api/webhooks/872068219156975647/sg05ylkjRClL0SosmZo58H7VjPEcA0Eef_GQWGLW_MZPJLKTuxtmQKdp5e8aNT6UotRM"
+    // You should make the webhook url private and not hard coding in your code.    
+    // i.e. store in database or setup environment
+	webhookURL := "https://discord.com/api/webhooks/example"
 
 	jsonStringByte, err := json.Marshal(notify)
 	if err != nil {

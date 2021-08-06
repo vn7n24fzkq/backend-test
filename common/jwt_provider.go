@@ -18,7 +18,8 @@ type jwtUserClaims struct {
 	jwt.StandardClaims
 }
 
-// Make sure this secret is private in your project
+// You should make this secret private and not hard coding in your code.    
+// i.e. store in database or setup environment
 var hmacSecret string = "casper"
 
 func GetJWT(jwtUser JWTUser) (string, error) {
